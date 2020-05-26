@@ -1,0 +1,26 @@
+type Item {
+  id: ID! @id @unique
+  title: String!
+  image: String!
+  user: User # relationship to Item
+  catogory:Catogory # relationship to Catogory
+}
+
+
+type Catogory {
+  id: ID! @id @unique
+  items: [Item!]!
+  user: User # relationship to Catogory
+}
+
+
+type User{
+id: ID! @id @unique
+email:String! @unique
+  name: String!
+  password:String!
+  catogorys: [Catogory!]!
+  permission:Boolean! @default(value:false)
+  resetToken: String
+  resetTokenExpiry: Float
+}

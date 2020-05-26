@@ -1,0 +1,125 @@
+# import * from './generated/prisma.graphql'
+
+type SuccessMessage {
+  message: String!
+}
+
+input singinInput {
+  email: String!
+  password: String!
+}
+input TextInput {
+  text: String!
+}
+type ItemDeleteInput {
+  id: String!
+}
+union SearchResult = Item | Catogory
+
+input UserCreateInput {
+  email: String!
+  name: String!
+  password: String!
+  permission: Boolean
+}
+input CatogoryCreateInput {
+  title: String!
+  image: String!
+}
+input delateCatogoryInput {
+  id: ID!
+}
+input UserUpdateInput {
+  name: String
+  password: String
+  permission: Boolean
+}
+input updateUserInput {
+  id: ID
+}
+
+type Mutation {
+  signup(data: UserCreateInput!): User!
+  signin(data: singinInput!): User!
+  signout: SuccessMessage
+
+  createCatogory(data: CatogoryCreateInput!): Catogory!
+  delateCatogory(data: delateCatogoryInput!): Catogory!
+  updateCatogory(
+    data: CatogoryUpdateInput!
+    where: CatogoryWhereUniqueInput!
+  ): Catogory!
+
+  createItem(data: ItemCreateInput!): Item!
+  updateItem(title: String, description: String, price: Int): Item!
+  deleteItem(id: ID!): Item
+
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: updateUserInput!): User
+    deleteUser(id:ID): User
+
+    convertImageToText(image:String!):SuccessMessage
+
+
+  searchTOCatogory(data: TextInput!): Catogory
+  searchTOItem(data: TextInput!): Item
+  searchAlphabetToImage(text: String!): SuccessMessage
+  # conertSoundToImage(data:TextInput!):Item
+}
+
+type Query {
+  search(title: String!): [SearchResult]!
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    first: Int
+  ): [Item]!
+  item(where: ItemWhereUniqueInput!): Item
+
+  catogories(
+    where: CatogoryWhereInput
+    orderBy: CatogoryOrderByInput
+    skip: Int
+    first: Int
+  ): [Catogory]!
+  catogory(where: CatogoryWhereUniqueInput): Catogory
+  users: [User]!
+  itemsConnection(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ItemConnection!
+  catogoriesConnection(
+    where: CatogoryWhereInput
+    orderBy: CatogoryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CatogoryConnection!
+  usersConnection(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserConnection!
+  me: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  catogory: [Catogory!]!
+  password: String!
+  permissions: Boolean
+}
